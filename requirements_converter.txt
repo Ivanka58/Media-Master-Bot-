@@ -1,0 +1,4 @@
+aiogram
+moviepy
+python-docx
+fpdf2
