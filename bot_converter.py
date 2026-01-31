@@ -1,5 +1,6 @@
 import os
 import asyncio
+import moviepy.editor
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters import Command
 from aiogram.types import Message, FSInputFile
