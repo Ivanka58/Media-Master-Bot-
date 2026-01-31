@@ -1,0 +1,43 @@
+name: Deploy Converter Bot (AIOGRAM)
+
+on:
+  # Запуск вручную через интерфейс GitHub Actions (для тестов)
+  workflow_dispatch:
+
+  # Автоматический перезапуск каждые 5 часов (чтобы обойти лимит в 6 часов)
+  schedule:
+    - cron: '0 */5 * * *'
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    # Максимальное время работы Job (360 минут = 6 часов)
+    timeout-minutes: 360 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install FFMPEG (System Dependency for MoviePy)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Converter Bot
+        env:
+          # Секрет, который ты должен добавить в GitHub
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          echo "Starting bot at $(date)"
+          # Запуск твоего основного скрипта
+          python bot_converter.py
